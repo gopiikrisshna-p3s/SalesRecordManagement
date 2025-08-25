@@ -1,14 +1,17 @@
 package com.example.SalesRecordManagement.Service;
 
+import com.example.SalesRecordManagement.DTO.AdminProfile;
 import com.example.SalesRecordManagement.DTO.RegisterRequest;
+import com.example.SalesRecordManagement.DTOResponse.AuditLogsResponse;
 import com.example.SalesRecordManagement.DTOResponse.UserListResponse;
 import com.example.SalesRecordManagement.Entity.Users;
-import com.example.SalesRecordManagement.Repository.AdminProfileRepository;
+import com.example.SalesRecordManagement.Repository.AuditLogsRepository;
 import com.example.SalesRecordManagement.Repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,8 +22,11 @@ public class AdminService {
     @Autowired
     private UsersRepository usersRepository;
     @Autowired
-    private AdminProfileRepository adminProfileRepository;
+    private AuditLogsRepository auditLogsRepository;
 
+    public String addProfile(Long id, AdminProfile adminProfile){
+
+    }
     public String createUser(RegisterRequest registerRequest){
         Users users = Users.builder()
                 .username(registerRequest.getUsername())
@@ -49,4 +55,18 @@ public class AdminService {
         usersRepository.save(user);
     }
 
+    public List<AuditLogsResponse> getLogDetails(){
+        return auditLogsRepository.findAll()
+                .stream().map(log -> AuditLogsResponse.builder()
+                        .LogId(log.getLogId())
+                        .action(log.getAction())
+                        .timestamp(log.getTimestamp())
+                        .username(log.getUser().getUsername())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    public List<AuditLogsResponse> getLogDetailsbyDate(LocalDateTime startDate, LocalDateTime endDate) {
+        return auditLogsRepository.findLogsByDateRange(startDate, endDate);
+    }
 }
