@@ -1,10 +1,12 @@
 package com.example.SalesRecordManagement.Service;
 
-import com.example.SalesRecordManagement.DTO.AdminProfile;
+import com.example.SalesRecordManagement.DTO.AdminProfileDto;
 import com.example.SalesRecordManagement.DTO.RegisterRequest;
 import com.example.SalesRecordManagement.DTOResponse.AuditLogsResponse;
 import com.example.SalesRecordManagement.DTOResponse.UserListResponse;
+import com.example.SalesRecordManagement.Entity.AdminProfile;
 import com.example.SalesRecordManagement.Entity.Users;
+import com.example.SalesRecordManagement.Repository.AdminProfileRepository;
 import com.example.SalesRecordManagement.Repository.AuditLogsRepository;
 import com.example.SalesRecordManagement.Repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +25,31 @@ public class AdminService {
     private UsersRepository usersRepository;
     @Autowired
     private AuditLogsRepository auditLogsRepository;
+    @Autowired
+    private AdminProfileRepository adminProfileRepository;
 
-    public String addProfile(Long id, AdminProfile adminProfile){
-
+    public String addProfile(Long id, AdminProfileDto adminProfileDto){
+        Users users = usersRepository.findById(id).get();
+        AdminProfile  adminProfile = AdminProfile.builder()
+                .name(adminProfileDto.getName())
+                .email(adminProfileDto.getEmail())
+                .phone(adminProfileDto.getPhone())
+                .user(users)
+                .build();
+        adminProfileRepository.save(adminProfile);
+        return "Admin Profile added Successfully";
     }
+
+    public String editProfile(Long id, AdminProfileDto adminProfileDto){
+        Users users = usersRepository.findById(id).get();
+        AdminProfile adminProfile = adminProfileRepository.findByUser(users);
+        adminProfile.setName(adminProfileDto.getName());
+        adminProfile.setEmail(adminProfileDto.getEmail());
+        adminProfile.setPhone(adminProfileDto.getPhone());
+        adminProfileRepository.save(adminProfile);
+        return "Admin Profile Edited Successfully";
+    }
+
     public String createUser(RegisterRequest registerRequest){
         Users users = Users.builder()
                 .username(registerRequest.getUsername())

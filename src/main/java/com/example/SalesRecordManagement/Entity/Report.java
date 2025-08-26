@@ -25,6 +25,7 @@ public class Report {
 
     @Column(unique = true)
     private String name;
+
     @Type(JsonType.class)
     @Column(columnDefinition = "jsonb")
     private JsonNode queryConfig;

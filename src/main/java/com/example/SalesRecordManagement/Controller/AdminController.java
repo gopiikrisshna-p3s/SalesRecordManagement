@@ -1,5 +1,6 @@
 package com.example.SalesRecordManagement.Controller;
 
+import com.example.SalesRecordManagement.DTO.AdminProfileDto;
 import com.example.SalesRecordManagement.DTO.RegisterRequest;
 import com.example.SalesRecordManagement.DTO.ReportRequest;
 import com.example.SalesRecordManagement.DTOResponse.*;
@@ -24,7 +25,6 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -45,11 +45,21 @@ public class AdminController {
     @Autowired
     private CustomerRepository customerRepository;
 
+    @PostMapping("/profile/userId/{id}")
+    public String createAdminProfile(@PathVariable Long id,@RequestBody AdminProfileDto adminProfileDto){
+        return adminService.addProfile(id, adminProfileDto);
+    }
+
+    @PutMapping("/editProfile/userId/{id}")
+    public String editAdminProfile(@PathVariable Long id,@RequestBody AdminProfileDto adminProfileDto){
+        return adminService.editProfile(id, adminProfileDto);
+    }
+
     @PostMapping("/create-user")
     public String createUser(@RequestBody RegisterRequest registerRequest){
         return adminService.createUser(registerRequest);
     }
-
+    
     @GetMapping("/all-users")
     public ResponseEntity<List<UserListResponse>> getAllUsers() {
         List<UserListResponse> users = adminService.getAllUsers();

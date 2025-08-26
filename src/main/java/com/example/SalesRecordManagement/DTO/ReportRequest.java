@@ -8,5 +8,5 @@ import lombok.Data;
 @Builder
 public class ReportRequest {
     private String name;
-    private JsonNode responseData; // Jackson will bind JSON body here
+    private JsonNode responseData;
 }
