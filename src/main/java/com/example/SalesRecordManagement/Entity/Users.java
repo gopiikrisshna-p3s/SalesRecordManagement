@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Where;
 
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -19,8 +20,8 @@ import java.util.List;
 @Where(clause = "active = true")
 public class Users {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID userId;
     @Column(unique = true, nullable = false)
     private String username;
     private String password;

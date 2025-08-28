@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.util.UUID;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -13,10 +16,13 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Analyst {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long analystId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID analystId;
     private String name;
     private String email;
+    private String Address;
+    private LocalDate dateOfBirth;
+    private String phone;
 
     @OneToOne
     @JoinColumn(name = "userId")

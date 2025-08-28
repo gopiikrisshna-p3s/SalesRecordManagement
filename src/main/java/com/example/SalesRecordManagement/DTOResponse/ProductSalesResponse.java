@@ -5,11 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.UUID;
+
 @Data
 @Builder
 @AllArgsConstructor
 public class ProductSalesResponse {
-    private Long productId;
+    private UUID productId;
     private String productName;
     private String category;
     private Long totalSale;

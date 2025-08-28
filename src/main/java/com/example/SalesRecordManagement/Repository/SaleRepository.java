@@ -9,14 +9,15 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Repository
-public interface SaleRepository extends JpaRepository<Sale,Long> {
+public interface SaleRepository extends JpaRepository<Sale, UUID> {
     @Query("SELECT s.product,SUM(s.quantity) as totalSale "+
             "FROM Sale s WHERE s.product.company.companyId=:companyId "+
             "GROUP BY s.product " +
             "ORDER BY totalSale DESC")
-    List<Object[]> findTopProductsByCompany(@Param("companyId") Long companyId);
+    List<Object[]> findTopProductsByCompany(@Param("companyId") UUID companyId);
 
     @Query("SELECT p.productId, p.productName, p.category,s.date, " +
             "SUM(s.quantity), SUM(s.price), " +
@@ -26,14 +27,14 @@ public interface SaleRepository extends JpaRepository<Sale,Long> {
             "WHERE p.productId = :productId " +
             "GROUP BY p.productId, p.productName, p.category, s.date, s.region " +
             "ORDER BY s.date ASC")
-    List<Object[]> getSalesReportByProduct(@Param("productId") Long productId);
+    List<Object[]> getSalesReportByProduct(@Param("productId") UUID productId);
 
     @Query("SELECT p.productId, p.productName, p.category, s.date, s.quantity, s.price, s.revenue, s.cost, s.profit, s.region " +
             "FROM Sale s " +
             "JOIN s.product p " +
             "WHERE p.productId = :productId " +
             "ORDER BY s.date DESC")
-    List<Object[]> getRecentSalesByProduct(@Param("productId") Long productId);
+    List<Object[]> getRecentSalesByProduct(@Param("productId") UUID productId);
 
     @Query("SELECT c.companyId, c.companyName, SUM(s.profit) as totalProfit " +
             "FROM Sale s " +

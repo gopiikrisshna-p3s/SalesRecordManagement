@@ -1,16 +1,18 @@
 package com.example.SalesRecordManagement.Service;
 
+import com.example.SalesRecordManagement.DTO.CustomerProfile;
 import com.example.SalesRecordManagement.DTOResponse.*;
 import com.example.SalesRecordManagement.Entity.Customer;
 import com.example.SalesRecordManagement.Entity.Product;
-import com.example.SalesRecordManagement.Repository.CompanyRepository;
-import com.example.SalesRecordManagement.Repository.ProductRepository;
-import com.example.SalesRecordManagement.Repository.SaleRepository;
+import com.example.SalesRecordManagement.Entity.Users;
+import com.example.SalesRecordManagement.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class CustomerService {
@@ -20,6 +22,22 @@ public class CustomerService {
     private ProductRepository productRepository;
     @Autowired
     private SaleRepository saleRepository;
+    @Autowired
+    private UsersRepository usersRepository;
+    @Autowired
+    private CustomerRepository customerRepository;
+
+    public String updateProfile(CustomerProfile customerProfile, UUID id) {
+        Users users = usersRepository.findById(id).get();
+        Customer customer = customerRepository.findByUser(users).orElseThrow();
+            customer.setCustomerName(customerProfile.getCustomerName());
+            customer.setEmail(customerProfile.getEmail());
+            customer.setAddress(customerProfile.getAddress());
+            customer.setPhone(customerProfile.getPhone());
+            customer.setDateOfBirth(customerProfile.getBirthDate());
+            customerRepository.save(customer);
+        return "Customer Profile Updated Successfully";
+    }
 
     public CustomerProfileResponse getCustomerProfile(Customer customer) {
         List<CompanyResponse> companies = companyRepository.findAllByCustomer(customer)
@@ -50,7 +68,7 @@ public class CustomerService {
                 .build();
     }
 
-    public List<ProductSalesResponse> getTopProductsByCompany(Long companyId) {
+    public List<ProductSalesResponse> getTopProductsByCompany(UUID companyId) {
         List<Object[]> results = saleRepository.findTopProductsByCompany(companyId);
 
         return results.stream()
@@ -63,11 +81,11 @@ public class CustomerService {
                 .toList();
     }
 
-    public List<ProductSalesReportResponse> getSalesReportByProduct(Long productId) {
+    public List<ProductSalesReportResponse> getSalesReportByProduct(UUID productId) {
         List<Object[]> results = saleRepository.getSalesReportByProduct(productId);
 
         return results.stream().map(obj -> ProductSalesReportResponse.builder()
-                .productId((Long) obj[0])
+                .productId((UUID) obj[0])
                 .productName((String) obj[1])
                 .category((String) obj[2])
                 .date((LocalDate) obj[3])
@@ -80,13 +98,13 @@ public class CustomerService {
                 .build()
         ).toList();
     }
-    public List<ProductSalesReportResponse> getRecentSalesByProduct(Long productId, int limit) {
+    public List<ProductSalesReportResponse> getRecentSalesByProduct(UUID productId, int limit) {
         List<Object[]> results = saleRepository.getRecentSalesByProduct(productId);
 
         return results.stream()
                 .limit(limit)
                 .map(obj -> ProductSalesReportResponse.builder()
-                        .productId((Long) obj[0])
+                        .productId((UUID) obj[0])
                         .productName((String) obj[1])
                         .category((String) obj[2])
                         .date((LocalDate) obj[3])

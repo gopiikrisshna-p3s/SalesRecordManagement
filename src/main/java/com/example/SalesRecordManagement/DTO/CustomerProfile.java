@@ -1,16 +1,14 @@
 package com.example.SalesRecordManagement.DTO;
 
-import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
 
 @Data
-@Builder
-public class AdminProfileDto {
-    private String name;
+public class CustomerProfile {
+    private String customerName;
     private String email;
-    private String phone;
     private String address;
-    private LocalDate dateOfBirth;
+    private LocalDate birthDate;
+    private String phone;
 }

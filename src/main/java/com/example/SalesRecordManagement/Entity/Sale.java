@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -17,8 +18,8 @@ import java.time.LocalDate;
 @Builder
 public class Sale {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long saleId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID saleId;
     private LocalDate date;
     private Integer quantity;
     private Double price;

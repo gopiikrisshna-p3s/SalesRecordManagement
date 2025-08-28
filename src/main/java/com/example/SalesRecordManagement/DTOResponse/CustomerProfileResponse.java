@@ -6,11 +6,12 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Builder
 public class CustomerProfileResponse {
-    private Long customerId;
+    private UUID customerId;
     private String customerName;
     private String email;
     private List<CompanyResponse> companyList;

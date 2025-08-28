@@ -39,7 +39,12 @@ public class AuthService {
             throw new UsernameNotFoundException("Wrong password");
         }
         String token =jwtUtil.generateToken(user.getUsername());
-        return AuthResponse.builder().token(token).build();
+        return AuthResponse.builder()
+                .token(token)
+                .userId(user.getUserId())
+                .username(user.getUsername())
+                .role(user.getRole())
+                .build();
     }
 
 

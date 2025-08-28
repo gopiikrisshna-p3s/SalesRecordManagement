@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -20,8 +21,8 @@ import java.time.LocalDateTime;
 @Builder
 public class Report {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long reportId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID reportId;
 
     @Column(unique = true)
     private String name;

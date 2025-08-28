@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/analyst")
@@ -35,17 +36,22 @@ public class AnalystController {
     private ReportRepository reportRepository;
 
     @PostMapping("/profile/{userId}")
-    public String analystProfile(@PathVariable Long userId, @RequestBody AnalystProfile analystProfile){
+    public String analystProfile(@PathVariable UUID userId, @RequestBody AnalystProfile analystProfile){
         return analystService.addProfile(analystProfile,userId);
     }
 
+    @PutMapping("/editProfile/{userId}")
+    public String editProfile(@PathVariable UUID userId, @RequestBody AnalystProfile analystProfile){
+        return analystService.updateProfile(analystProfile,userId);
+    }
+
     @GetMapping("/sale-by-company/{id}")
-    public List<ProductSalesResponse> topProduct(@PathVariable Long id){
+    public List<ProductSalesResponse> topProduct(@PathVariable UUID id){
         return customerService.getTopProductsByCompany(id);
     }
 
     @GetMapping("/sale-by-product/{id}")
-    public List<ProductSalesReportResponse> getSalesReport(@PathVariable Long id){
+    public List<ProductSalesReportResponse> getSalesReport(@PathVariable UUID id){
         return customerService.getSalesReportByProduct(id);
     }
 

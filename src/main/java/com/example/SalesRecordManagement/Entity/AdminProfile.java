@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.util.UUID;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -13,8 +16,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class AdminProfile {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID Id;
 
     @OneToOne
     @JoinColumn(name = "userId")
@@ -23,5 +26,7 @@ public class AdminProfile {
     private String name;
     private String email;
     private String phone;
+    private String Address;
+    private LocalDate dateOfBirth;
 
 }

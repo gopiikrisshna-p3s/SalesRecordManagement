@@ -10,10 +10,7 @@ import com.example.SalesRecordManagement.Entity.Users;
 import com.example.SalesRecordManagement.Repository.CustomerRepository;
 import com.example.SalesRecordManagement.Repository.ReportRepository;
 import com.example.SalesRecordManagement.Repository.UsersRepository;
-import com.example.SalesRecordManagement.Service.AdminService;
-import com.example.SalesRecordManagement.Service.AnalystService;
-import com.example.SalesRecordManagement.Service.CustomerService;
-import com.example.SalesRecordManagement.Service.ViewerService;
+import com.example.SalesRecordManagement.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
@@ -26,6 +23,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/admin")
@@ -44,14 +42,17 @@ public class AdminController {
     private ViewerService viewerService;
     @Autowired
     private CustomerRepository customerRepository;
+    @Autowired
+    private AuthService authService;
+
 
     @PostMapping("/profile/userId/{id}")
-    public String createAdminProfile(@PathVariable Long id,@RequestBody AdminProfileDto adminProfileDto){
+    public String createAdminProfile(@PathVariable UUID id, @RequestBody AdminProfileDto adminProfileDto){
         return adminService.addProfile(id, adminProfileDto);
     }
 
     @PutMapping("/editProfile/userId/{id}")
-    public String editAdminProfile(@PathVariable Long id,@RequestBody AdminProfileDto adminProfileDto){
+    public String editAdminProfile(@PathVariable UUID id,@RequestBody AdminProfileDto adminProfileDto){
         return adminService.editProfile(id, adminProfileDto);
     }
 
@@ -67,17 +68,17 @@ public class AdminController {
     }
 
     @DeleteMapping("/user/deactivate/{userId}")
-    public ResponseEntity<String> deactivateUser(@PathVariable Long userId) {
+    public ResponseEntity<String> deactivateUser(@PathVariable UUID userId) {
         adminService.deactivateUser(userId);
         return ResponseEntity.ok("User deactivated successfully!");
     }
     @GetMapping("/sale-by-company/{id}")
-    public List<ProductSalesResponse> topProduct(@PathVariable Long id){
+    public List<ProductSalesResponse> topProduct(@PathVariable UUID id){
         return customerService.getTopProductsByCompany(id);
     }
 
     @GetMapping("/sale-by-product/{id}")
-    public List<ProductSalesReportResponse> getSalesReport(@PathVariable Long id){
+    public List<ProductSalesReportResponse> getSalesReport(@PathVariable UUID id){
         return customerService.getSalesReportByProduct(id);
     }
 
@@ -147,7 +148,7 @@ public class AdminController {
     }
 
     @GetMapping("/customer/{id}")
-    public CustomerProfileResponse profile(@PathVariable Long id){
+    public CustomerProfileResponse profile(@PathVariable UUID id){
         Customer customer = customerRepository.findById(id).orElseThrow();
         return customerService.getCustomerProfile(customer);
     }

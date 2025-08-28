@@ -11,9 +11,10 @@ import org.springframework.stereotype.Repository;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
-public interface ProductRepository extends JpaRepository<Product,Long> {
+public interface ProductRepository extends JpaRepository<Product, UUID> {
     Optional<Product> findByCodeAndCompany(String code, Company company);
     List<Product> findByCompany(Company company);
 

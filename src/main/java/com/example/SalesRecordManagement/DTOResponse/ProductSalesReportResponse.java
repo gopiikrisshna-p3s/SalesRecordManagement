@@ -6,12 +6,13 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 @Builder
 @AllArgsConstructor
 public class ProductSalesReportResponse {
-    private Long productId;
+    private UUID productId;
     private String productName;
     private String category;
     private LocalDate date;

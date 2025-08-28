@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
+import java.util.UUID;
 
 
 @Entity
@@ -15,8 +16,8 @@ import java.util.List;
 @Builder
 public class Company {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long companyId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID companyId;
     private String companyName;
     private String companyAddress;
 

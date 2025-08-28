@@ -9,9 +9,10 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Repository
-public interface AuditLogsRepository extends JpaRepository<AuditLogs,Long> {
+public interface AuditLogsRepository extends JpaRepository<AuditLogs, UUID> {
     @Query("SELECT new com.example.SalesRecordManagement.DTOResponse.AuditLogsResponse(" +
             "a.logId, a.action, a.timestamp, a.user.username) " +
             "FROM AuditLogs a " +

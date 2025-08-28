@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -16,8 +17,8 @@ import java.time.LocalDateTime;
 @Builder
 public class AuditLogs {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long logId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID logId;
 
     @ManyToOne
     @JoinColumn(name = "userId")

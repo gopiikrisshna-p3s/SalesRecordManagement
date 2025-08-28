@@ -16,10 +16,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/viewer")
@@ -36,8 +36,13 @@ public class ViewerController {
     private AnalystService analystService;
 
     @PostMapping("/profile/{userId}")
-    public String viewerProfile(@PathVariable Long userId, @RequestBody ViewerProfile viewerProfile){
+    public String viewerProfile(@PathVariable UUID userId, @RequestBody ViewerProfile viewerProfile){
         return viewerService.addProfile(viewerProfile,userId);
+    }
+
+    @PutMapping("/editProfile/{userId}")
+    public String editProfile(@PathVariable UUID userId, @RequestBody ViewerProfile viewerProfile){
+        return viewerService.updateProfile(viewerProfile,userId);
     }
 
     @GetMapping("/top-companies")
@@ -51,24 +56,24 @@ public class ViewerController {
     }
 
     @GetMapping("/customer/{id}")
-    public CustomerProfileResponse profile(@PathVariable Long id){
+    public CustomerProfileResponse profile(@PathVariable UUID id){
         Customer customer = customerRepository.findById(id).orElseThrow();
         return customerService.getCustomerProfile(customer);
     }
 
     @GetMapping("/sale-by-company/{id}")
-    public List<ProductSalesResponse> topProduct(@PathVariable Long id){
+    public List<ProductSalesResponse> topProduct(@PathVariable UUID id){
         return customerService.getTopProductsByCompany(id);
     }
 
     @GetMapping("/sale-by-product/{id}")
-    public List<ProductSalesReportResponse> getSalesReport(@PathVariable Long id){
+    public List<ProductSalesReportResponse> getSalesReport(@PathVariable UUID id){
         return customerService.getSalesReportByProduct(id);
     }
 
     @GetMapping("/products/{productId}/recent-sales")
     public ResponseEntity<List<ProductSalesReportResponse>> getRecentSales(
-            @PathVariable Long productId,
+            @PathVariable UUID productId,
             @RequestParam(defaultValue = "3") int limit) {
 
         return ResponseEntity.ok(customerService.getRecentSalesByProduct(productId, limit));

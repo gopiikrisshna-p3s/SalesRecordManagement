@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class AnalystService {
@@ -28,13 +29,28 @@ public class AnalystService {
     @Autowired
     private AuditLogsRepository auditLogsRepository;
 
-    public String addProfile(AnalystProfile analystProfile, Long id){
+    public String addProfile(AnalystProfile analystProfile, UUID id){
         Users users = usersRepository.findById(id).orElseThrow(()-> new RuntimeException("User not found!"));
         Analyst analyst = Analyst.builder()
                 .user(users)
                 .name(analystProfile.getAnalystName())
                 .email(analystProfile.getAnalystEmail())
+                .Address(analystProfile.getAddress())
+                .dateOfBirth(analystProfile.getDateOfBirth())
+                .phone(analystProfile.getPhone())
                 .build();
+        analystRepository.save(analyst);
+        return "Analyst Profile Saved Successfully!";
+    }
+
+    public String updateProfile(AnalystProfile analystProfile, UUID id){
+        Users users = usersRepository.findById(id).orElseThrow(()-> new RuntimeException("User not found!"));
+        Analyst analyst = analystRepository.findByUser(users);
+        analyst.setName(analystProfile.getAnalystName());
+        analyst.setEmail(analystProfile.getAnalystEmail());
+        analyst.setAddress(analystProfile.getAddress());
+        analyst.setDateOfBirth(analystProfile.getDateOfBirth());
+        analyst.setPhone(analystProfile.getPhone());
         analystRepository.save(analyst);
         return "Analyst Profile Saved Successfully!";
     }

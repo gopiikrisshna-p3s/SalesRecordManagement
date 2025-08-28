@@ -16,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,22 +30,38 @@ public class ViewerService {
     @Autowired
     private CompanyRepository companyRepository;
 
-    public String addProfile(ViewerProfile viewerProfile, Long id){
+    public String addProfile(ViewerProfile viewerProfile, UUID id){
         Users users = usersRepository.findById(id).orElseThrow();
         Viewer viewer = Viewer.builder()
                 .user(users)
                 .name(viewerProfile.getViewerName())
                 .email(viewerProfile.getViewerEmail())
+                .Address(viewerProfile.getAddress())
+                .dateOfBirth(viewerProfile.getDateOfBirth())
+                .phone(viewerProfile.getPhone())
                 .build();
         viewerRepository.save(viewer);
         return "Viewer Profile Saved Successfully!";
     }
+
+    public String updateProfile(ViewerProfile viewerProfile, UUID id){
+        Users users = usersRepository.findById(id).orElseThrow();
+        Viewer viewer = viewerRepository.findByUser(users);
+        viewer.setName(viewerProfile.getViewerName());
+        viewer.setEmail(viewerProfile.getViewerEmail());
+        viewer.setAddress(viewerProfile.getAddress());
+        viewer.setDateOfBirth(viewerProfile.getDateOfBirth());
+        viewer.setPhone(viewerProfile.getPhone());
+        viewerRepository.save(viewer);
+        return "Viewer Profile Updated Successfully!";
+    }
+
     public List<CompanyProfitResponse> getTopCompaniesByProfit() {
         List<Object[]> results = saleRepository.findTopCompaniesByProfit(PageRequest.of(0, 5));
 
         return results.stream()
                 .map(obj -> new CompanyProfitResponse(
-                        ((Number) obj[0]).longValue(),
+                        ((UUID) obj[0]),
                         (String) obj[1],
                         ((Number) obj[2]).doubleValue()
                 ))

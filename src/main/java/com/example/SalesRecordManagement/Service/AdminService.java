@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,24 +29,28 @@ public class AdminService {
     @Autowired
     private AdminProfileRepository adminProfileRepository;
 
-    public String addProfile(Long id, AdminProfileDto adminProfileDto){
+    public String addProfile(UUID id, AdminProfileDto adminProfileDto){
         Users users = usersRepository.findById(id).get();
         AdminProfile  adminProfile = AdminProfile.builder()
                 .name(adminProfileDto.getName())
                 .email(adminProfileDto.getEmail())
                 .phone(adminProfileDto.getPhone())
+                .Address(adminProfileDto.getAddress())
+                .dateOfBirth(adminProfileDto.getDateOfBirth())
                 .user(users)
                 .build();
         adminProfileRepository.save(adminProfile);
         return "Admin Profile added Successfully";
     }
 
-    public String editProfile(Long id, AdminProfileDto adminProfileDto){
+    public String editProfile(UUID id, AdminProfileDto adminProfileDto){
         Users users = usersRepository.findById(id).get();
         AdminProfile adminProfile = adminProfileRepository.findByUser(users);
         adminProfile.setName(adminProfileDto.getName());
         adminProfile.setEmail(adminProfileDto.getEmail());
         adminProfile.setPhone(adminProfileDto.getPhone());
+        adminProfile.setAddress(adminProfileDto.getAddress());
+        adminProfile.setDateOfBirth(adminProfileDto.getDateOfBirth());
         adminProfileRepository.save(adminProfile);
         return "Admin Profile Edited Successfully";
     }
@@ -70,7 +75,7 @@ public class AdminService {
                .collect(Collectors.toList());
     }
 
-    public void deactivateUser(Long userId) {
+    public void deactivateUser(UUID userId) {
         Users user = usersRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
