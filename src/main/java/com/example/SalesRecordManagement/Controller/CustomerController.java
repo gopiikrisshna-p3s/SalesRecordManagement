@@ -3,6 +3,7 @@ import com.example.SalesRecordManagement.DTO.CustomerProfile;
 import com.example.SalesRecordManagement.DTOResponse.CustomerProfileResponse;
 import com.example.SalesRecordManagement.DTOResponse.ProductSalesReportResponse;
 import com.example.SalesRecordManagement.DTOResponse.ProductSalesResponse;
+import com.example.SalesRecordManagement.DTOResponse.RecentSaleResponse;
 import com.example.SalesRecordManagement.Entity.Customer;
 import com.example.SalesRecordManagement.Entity.Users;
 import com.example.SalesRecordManagement.Repository.CustomerRepository;
@@ -30,6 +31,7 @@ public class CustomerController {
     private CustomerRepository customerRepository;
     @Autowired
     private CustomerService customerService;
+
 
     @PutMapping("/profile/{userId}")
     public String editProfile(@PathVariable UUID userId, @RequestBody CustomerProfile customerProfile){
@@ -71,5 +73,10 @@ public class CustomerController {
             @RequestParam(defaultValue = "3") int limit) {
 
         return ResponseEntity.ok(customerService.getRecentSalesByProduct(productId, limit));
+    }
+
+    @GetMapping("/{userId}/recent-sales")
+    public List<RecentSaleResponse> getRecentSales(@PathVariable UUID userId) {
+        return customerService.getRecentSalesByUser(userId);
     }
 }

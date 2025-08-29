@@ -1,6 +1,7 @@
 package com.example.SalesRecordManagement.Repository;
 
 import com.example.SalesRecordManagement.DTOResponse.ProductSalesReportResponse;
+import com.example.SalesRecordManagement.DTOResponse.RecentSaleResponse;
 import com.example.SalesRecordManagement.Entity.Sale;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -51,6 +52,17 @@ public interface SaleRepository extends JpaRepository<Sale, UUID> {
             "JOIN s.product p " +
             "WHERE s.region = :region")
     List<ProductSalesReportResponse> findSalesByRegion(@Param("region") String region);
+
+    @Query("SELECT new com.example.SalesRecordManagement.DTOResponse.RecentSaleResponse(s.saleId, p.productName, c.companyName, " +
+            "s.quantity, s.revenue, s.date) " +
+            "FROM Sale s " +
+            "JOIN s.product p " +
+            "JOIN p.company c " +
+            "JOIN c.customer cu " +
+            "JOIN cu.user u " +
+            "WHERE u.userId = :userId " +
+            "ORDER BY s.date DESC")
+    List<RecentSaleResponse> findRecentSalesByUser(@Param("userId") UUID userId);
 
 
 }

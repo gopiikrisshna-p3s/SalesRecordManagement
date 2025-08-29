@@ -64,6 +64,9 @@ public class CustomerService {
                 .customerId(customer.getCustomerId())
                 .customerName(customer.getCustomerName())
                 .email(customer.getEmail())
+                .address(customer.getAddress())
+                .phone(customer.getPhone())
+                .birthDate(customer.getDateOfBirth())
                 .companyList(companies)
                 .build();
     }
@@ -117,5 +120,10 @@ public class CustomerService {
                         .build()
                 )
                 .toList();
+    }
+
+    public List<RecentSaleResponse> getRecentSalesByUser(UUID userId) {
+        List<RecentSaleResponse> allSales = saleRepository.findRecentSalesByUser(userId);
+        return allSales.stream().limit(3).toList();
     }
 }

@@ -5,6 +5,7 @@ import com.example.SalesRecordManagement.Entity.Product;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,5 +15,8 @@ public class CustomerProfileResponse {
     private UUID customerId;
     private String customerName;
     private String email;
+    private String phone;
+    private String address;
+    private LocalDate birthDate;
     private List<CompanyResponse> companyList;
 }
